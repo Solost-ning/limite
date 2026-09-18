@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电场梯度与四极相互作用</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: "Microsoft YaHei", "Times New Roman", serif;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        line-height: 1.8;
+        font-size: 16px;
+        color: #222;
+        background: #fafbfc;
+    }
+    h1 {
+        font-size: 26px;
+        text-align: center;
+        margin-bottom: 10px;
+        color: #1a365d;
+    }
+    .author {
+        text-align: center;
+        color: #555;
+        margin-bottom: 2em;
+        font-style: italic;
+    }
+    h2 {
+        font-size: 20px;
+        color: #1a365d;
+        margin-top: 2.2em;
+        margin-bottom: 0.8em;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    h3 {
+        font-size: 18px;
+        color: #2c5282;
+        margin-top: 1.6em;
+        margin-bottom: 0.6em;
+    }
+    h4 {
+        font-size: 16px;
+        color: #2b6cb0;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+    }
+    p { margin-bottom: 1em; text-align: justify; }
+    .equation {
+        margin: 1.2em 0;
+        text-align: center;
+        overflow-x: auto;
+        padding: 8px 4px;
+        background: #f7fafc;
+        border-radius: 4px;
+    }
+    ol, ul {
+        margin-left: 2em;
+        margin-bottom: 1em;
+    }
+    li { margin-bottom: 0.4em; }
+    sup {
+        font-size: 0.8em;
+        color: #4a5568;
+    }
+    blockquote {
+        background: #f0f4f8;
+        border-left: 4px solid #3182ce;
+        padding: 10px 16px;
+        margin: 1.2em 0;
+        color: #2d3748;
+        border-radius: 0 4px 4px 0;
+    }
+    .figure-note {
+        font-size: 14px;
+        color: #4a5568;
+        margin-top: 0.5em;
+        text-indent: 0;
+    }
+    .matrix {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    hr {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 2em 0;
+    }
+</style>
+</head>
+<body>
+
+<h1>电场梯度与四极相互作用</h1>
+<p class="author">Hartmut Spiering</p>
+
+<p>穆斯堡尔效应已成为分析化学中的常用手段。X射线光谱、核磁共振(NMR)、电子顺磁共振(EPR)、磁圆二色谱(MCD)等技术需要采用高度复杂的解析流程才能获取化合物的可靠化学信息；与之不同，穆斯堡尔效应在解析四极分裂谱时通常采用较为简易的处理方式。这种简易处理得益于谱图本身的结构，尤其是顺磁与抗磁化合物中核跃迁 \(3/2\to1/2\) 产生的简单双峰。两条吸收谱线的间距即<strong>四极分裂 \(\boldsymbol{\Delta E_Q}\)</strong>，两条谱线的中心位置即<strong>同质异能移</strong>，均可直接从谱图中读取。要获得这两项蕴含丰富化学信息的参数，并不需要完整的理论体系。</p>
+
+<p>从四极分裂谱中还可进一步得到原子核处电场梯度张量的符号、不对称度，以及该张量相对于晶轴的取向。但要从穆斯堡尔谱中解析这些参数，需要用到相对复杂的理论，且相关理论仅散见于原始文献中<sup>[1-3]</sup>。更棘手的是，绝大多数情况下无法唯一测定张量的各个分量，只能从谱图的测量量中得到分量之间的相互关系<sup>[4]</sup>。穆斯堡尔原子振动振幅的各向异性还会带来额外的复杂性，由此产生各向异性德拜-沃勒因子。</p>
+
+<p>上述限制导致穆斯堡尔效应的全部潜力尚未得到普遍应用。尽管学界已在亚硝酰铁氰化钠<sup>[5]</sup>、脱氧肌红蛋白的血红素基团<sup>[6]</sup>、一氧化碳配位肌红蛋白<sup>[7]</sup>等体系中开展了出色的研究，但这些工作都需要克服制备高丰度\(^{57}\text{Fe}\)、足够大尺寸单晶的难题。另一方面，利用分子轨道(MO)方法计算分子晶体中电场梯度的水平已有显著提升<sup>[8]</sup>，因此将计算结果与精细实验数据进行比对变得十分必要。基于此，本文详细阐述了解析四极分裂穆斯堡尔谱的数学工具。</p>
+
+<p>近年来，学界提出了若干简化穆斯堡尔吸收谱线强度理论描述的方案<sup>[9-11]</sup>。这些描述的共同点在于：根据核跃迁的多极性，采用不同秩的张量计算谱线强度。这一思想是扰动角关联(PAC)实验解析中的标准方法<sup>[12]</sup>。穆斯堡尔吸收体可分为单晶、无规粉末与织构粉末<sup>[13,14]</sup>几类，这就需要对理论进行推广，将吸收体中电场梯度(EFG)张量主轴系的取向分布函数纳入理论框架。该推广已在穆斯堡尔偶极跃迁<sup>[15]</sup>以及近期的PAC实验<sup>[16]</sup>中完成。针对无规粉末与各向异性德拜-沃勒因子共同导致的戈尔德anski-卡里亚金(Goldanskii-Karyagin)效应<sup>[17,18]</sup>，也已通过张量方法重新进行了讨论<sup>[15]</sup>。</p>
+
+<p>本章旨在帮助读者熟悉张量方法。全文均采用张量形式，并将理论拓展至混合跃迁(\(M1/E2\))情形，同时纳入织构函数与各向异性德拜-沃勒因子。通过引入"超织构"分量，可对这一复杂物理情景实现简洁描述。</p>
+
+<p>本章共分为五节，前三节偏理论，给出后两节应用部分所需的公式：</p>
+<ol>
+    <li>第1节介绍四极相互作用的核自旋哈密顿量，以及电场梯度的若干性质。</li>
+    <li>第2节选取若干原子核为例，讨论穆斯堡尔跃迁的谱线位置：包括\(^{57}\text{Fe}\)的磁偶极跃迁(\(M1\)) \(3/2^-\to1/2^-\)；\(^{156}\text{Gd}\)的电四极跃迁(\(E2\)) \(2^+\to0^+\)；\(^{151}\text{Eu}\)的磁偶极跃迁(\(M1\)) \(5/2^+\to7/2^+\)；\(^{197}\text{Au}\)的混合跃迁(\(M1/E2\)) \(1/2^+\to3/2^+\)。</li>
+    <li>第3节详细推导穆斯堡尔吸收谱线的强度，引入辐射密度矩阵、吸收体矩阵、强度矩阵、织构、超织构、\(f\)因子系数，并针对上述核跃迁显式写出各矩阵形式。</li>
+</ol>
+
+<h2>1 四极相互作用的核自旋哈密顿量</h2>
+
+<p>核电荷与周围电荷分布之间的静电相互作用能可表示为：</p>
+<div class="equation">
+\[
+W=\int_{\tau_{n}} \int_{\tau} \frac{\rho_{n}\left(r_{n}\right) \rho(r)}{\left|r_{n}-r\right|} d \tau_{n} d \tau
+\]
+</div>
+
+<p>其中\(\rho_n(r_n)\)为核电荷密度，\(\rho(r)\)为周围环境的电荷密度。将\(1/|r_n-r|\)展开为球谐函数级数：</p>
+<div class="equation">
+\[
+\frac{1}{\left|r_{n}-r\right|}=\sum_{k=0}^{\infty} \sum_{m=-k}^{k} \frac{4 \pi}{2 k+1} \frac{r_{n}^{k}}{r^{k+1}} Y_{k m}\left(\vartheta_{n}, \varphi_{n}\right) Y_{k m}^{*}(\vartheta, \varphi)
+\]
+</div>
+
+<p>代入相互作用能表达式，可将其分解为各阶多极相互作用之和：</p>
+<div class="equation">
+\[
+W=\sum_{k=0}^{\infty} \sum_{m=-k}^{k}(-)^{m} Q_{k m} C_{k-m}
+\]
+</div>
+
+<p>其中\(Q_{km}\)为核多极矩张量，\(C_{km}\)为环境电场的多极张量，定义分别为：</p>
+<div class="equation">
+\[
+Q_{k m}=\left(\frac{4 \pi}{2 k+1}\right)^{1 / 2} \int_{\tau_{n}} \rho_{n}\left(r_{n}\right) r_{n}^{k} Y_{k m}\left(\vartheta_{n}, \varphi_{n}\right) d \tau_{n} \tag{1.4a}
+\]
+</div>
+<div class="equation">
+\[
+C_{k m}=\left(\frac{4 \pi}{2 k+1}\right)^{1 / 2} \int_{\tau} \rho(r) r^{-(k+1)} Y_{k m}(\vartheta, \varphi) d \tau
+\]
+</div>
+
+<p>我们仅关注四极相互作用，对应\(k=2\)的项：</p>
+<div class="equation">
+\[
+W_{Q}=\sum_{m=-2}^{2}(-)^{m} Q_{2 m} C_{2-m}
+\]
+</div>
+
+<p>对于处于态\(|IM\rangle\)的原子核，其波函数\(\psi_{IM}(R_1,R_2,\dots,R_A)\)描述\(A\)个核子的坐标。为计算原子核的\(Q_{2m}\)，需将核电荷密度\(\rho_n(r_n)\)用波函数表示。位置\(r_n\)处的电荷密度是算符的期望值：</p>
+<div class="equation">
+\[
+\hat{\rho}_{n}\left(r_{n}\right)=\sum_{i=1}^{A} q_{i} \delta\left(R_{i}-r_{n}\right)
+\]
+</div>
+
+<p>该算符是所有核子点电荷的总和；\(R_i\)为第\(i\)个核子的位置；质子的\(q_i=e\)，中子的\(q_i=0\)。将期望值\(\langle\psi_{IM}|\hat{\rho}_n|\psi_{IM}\rangle\)代入式(1.4)，对\(d\tau_n\)积分后得到：</p>
+<div class="equation">
+\[
+Q_{2 m}=\left(\frac{4 \pi}{5}\right)^{1 / 2} \int \psi_{I M}^{*} \sum_{i=1}^{A} q_{i} R_{i}^{2} Y_{2 m}\left(\theta_{i}, \phi_{i}\right) \psi_{I M} d R_{1} \cdots d R_{A}
+\]
+</div>
+
+<p>因此\(Q_{2m}\)等价于下述核张量算符的期望值：</p>
+<div class="equation">
+\[
+\hat{Q}_{2 m}=\left(\frac{4 \pi}{5}\right)^{1 / 2} \sum_{i=1}^{A} q_{i} R_{i}^{2} Y_{2 m}\left(\theta_{i}, \phi_{i}\right)
+\]
+</div>
+
+<p>\(R_i,\theta_i,\phi_i\)为第\(i\)个核子的球极坐标。将\(\hat{Q}_{2m}\)改写为笛卡尔坐标形式（后文将用到）：</p>
+<div class="equation">
+\[
+\hat{Q}_{20}=\frac{1}{2} \sum_{i} q_{i}\left(3 Z_{i}^{2}-R_{i}^{2}\right) \tag{1.9}
+\]
+</div>
+
+<p>在原子核\(2I+1\)个自旋态\(|IM\rangle\)的子空间内，张量算符的矩阵元可利用维格纳-埃克特定理计算。矩阵元可分解为公共因子（约化矩阵元）\(\langle I\|\hat{Q}_{2}\| I\rangle\)与几何部分：</p>
+<div class="equation">
+\[
+\left< I M'\left|\hat{Q}_{2 m}\right| I M''\right>=(-)^{I-M'}\left(\begin{array}{ccc}I & 2 & I \\ -M' & m & M'' \end{array}\right)\left(I\left\| \hat{Q}_{2}\right\| I\right) \tag{1.10}
+\]
+</div>
+
+<div class="equation">
+\[
+\left(I\left\| \hat{Q}_{2}\right\| I\right)=\frac{1}{2} e Q\left(\begin{array}{ccc}I & 2 & I \\ -I & 0 & I\end{array}\right)^{-1} \tag{1.11}
+\]
+</div>
+
+<p>利用升算符与降算符，四极算符可表示为自旋算符的形式：</p>
+<div class="equation">
+\[
+\begin{aligned} 
+\hat{q}_{20} & =\left<\hat{q}_{2}\right> \frac{1}{2}\left(3 I_{z}^{2}-I^{2}\right) \\ 
+\hat{q}_{2 \pm 1} & =\mp\left<\hat{q}_{2}\right>\left(\frac{3}{2}\right)^{1 / 2}\left[\frac{1}{2}\left(I_{z} I_{ \pm}+I_{ \pm} I_{z}\right)\right] \\ 
+\hat{q}_{2 \pm 2} & =\left<\hat{q}_{2}\right>\left(\frac{3}{8}\right)^{1 / 2} I_{ \pm}^{2} 
+\end{aligned}
+\]
+</div>
+
+<p>电场梯度张量与\(C_{2m}\)的对应关系为：</p>
+<div class="equation">
+\[
+C_{20}=\frac{1}{2} V_{z z}
+\]
+</div>
+<div class="equation">
+\[
+C_{2 \pm 1}=\mp \frac{1}{\sqrt{6}}\left(V_{x z} \pm i V_{y z}\right)
+\]
+</div>
+<div class="equation">
+\[
+C_{2 \pm 2}=\frac{1}{2 \sqrt{6}}\left(V_{x x}-V_{y y} \pm 2 i V_{x y}\right)
+\]
+</div>
+
+<p>根据拉普拉斯方程\(\Delta V=0\)，对称电场梯度张量\((V_{ik}=V_{ki})\)的迹为零。在主轴系(PAS)下张量对角化；约定不对称参数\(\eta=(V_{xx}-V_{yy})/V_{zz}\)，满足\(0\le\eta\le1\)。于是整个张量仅由\(V_{zz}\)和\(\eta\)两个独立参数完全确定：</p>
+<div class="equation">
+\[
+\left(V_{i k}\right)=V_{z z}\begin{pmatrix}
+-(1-\eta)/2 & 0 & 0\\
+0 & -(1+\eta)/2 & 0\\
+0 & 0 & 1
+\end{pmatrix}
+\]
+</div>
+
+<p>在电场梯度主轴坐标系下，四极相互作用哈密顿量写为标准形式：</p>
+<div class="equation">
+\[
+H=\frac{e Q V_{z z}}{4 I(2 I-1)}\left[3 I_{z}^{2}-I(I+1)+\frac{\eta}{2}\left(I_{+}^{2}+I_{-}^{2}\right)\right] \tag{1.15}
+\]
+</div>
+
+<p>完整的电场梯度包含5个独立分量，可用\(V_{zz},\eta\)以及描述主轴取向的3个欧拉角\(\phi,\vartheta,\psi\)来表达。定义张量的旋转不变量十分有用。平凡不变量\(\phi_1\)就是张量的迹：\(\phi_1=\sum_i V_{ii}=0\)。第二个不变量为：</p>
+<div class="equation">
+\[
+\phi_{11}=\sum _{m}(-)^{m} C_{2 m} C_{2-m}
+\]
+</div>
+
+<p>在笛卡尔坐标下展开为：</p>
+<div class="equation">
+\[
+\phi_{11}=\frac{1}{4}\left[V_{z z}^{2}+\frac{1}{3}\left(V_{x x}-V_{y y}\right)^{2}+\frac{4}{3}\left(V_{x y}^{2}+V_{x z}^{2}+V_{y z}^{2}\right)\right] \tag{1.16}
+\]
+</div>
+
+<p>\(\phi_{11}\)也等价于\(V_{ik}\)矩阵全部3个二阶对称行列式的负平均值：</p>
+<div class="equation">
+\[
+\phi_{11}=-\frac{1}{3}\left\{
+\begin{vmatrix}V_{xx}&V_{xy}\\V_{yx}&V_{yy}\end{vmatrix}+
+\begin{vmatrix}V_{xx}&V_{xz}\\V_{zx}&V_{zz}\end{vmatrix}+
+\begin{vmatrix}V_{yy}&V_{yz}\\V_{zy}&V_{zz}\end{vmatrix}
+\right\}
+\]
+</div>
+
+<p>在主轴系下可简化为：</p>
+<div class="equation">
+\[
+\phi_{11}=\frac{1}{4} V_{z z}^{2}\left(1+\eta^{2} / 3\right) \tag{1.18}
+\]
+</div>
+
+<p>三阶不变量\(\phi_{111}\)为张量的行列式：</p>
+<div class="equation">
+\[
+\begin{aligned} \phi_{111}= & V_{x x} V_{y y} V_{z z}+2 V_{x y} V_{x z} V_{y z} \\ & -V_{x x} V_{y z}^{2}-V_{y y} V_{x z}^{2}-V_{z z} V_{x y}^{2} \end{aligned}
+\]
+</div>
+
+<p>主轴系下：</p>
+<div class="equation">
+\[
+\phi_{111}=V_{z z}^{3}\left(1-\eta^{2}\right) / 4 \tag{1.20}
+\]
+</div>
+
+<h2>2 穆斯堡尔跃迁的谱线位置</h2>
+
+<p>四极哈密顿量的本征方程为：</p>
+<div class="equation">
+\[
+\sum_{m'} H_{m m'} e_{\beta m'}=E_{\beta} e_{\beta m} \tag{2.2}
+\]
+</div>
+
+<h3>2.1 不同自旋量子数的哈密顿量本征解</h3>
+
+<h4>(i) \(I=3/2\) 的哈密顿量</h4>
+<p>哈密顿矩阵形式为：</p>
+<div class="equation">
+\[
+\left(H_{i k}\right)=\mu_{3 / 2}\begin{pmatrix}
+3 & 0 & \sqrt{3} \eta & 0 \\
+0 & -3 & 0 & \sqrt{3} \eta \\
+\sqrt{3} \eta & 0 & -3 & 0 \\
+0 & \sqrt{3} \eta & 0 & 3
+\end{pmatrix}
+\equiv \mu_{3 / 2}\left(h_{i k}\right)
+\]
+</div>
+<p>其中\(\mu_{I}=e Q V_{zz}/[4I(2I-1)]\)。本征值与本征矢为：</p>
+<div class="equation">
+\[
+\begin{array}{ll}
+\epsilon_{+}=\epsilon_{1,2}=3\left(1+\eta^{2} / 3\right)^{1 / 2}, &
+\begin{cases}
+\left|\frac{3}{2} e_{1}\right>=e_{+}\left|\frac{3}{2} \frac{3}{2}\right>+e_{-}\left|\frac{3}{2}-\frac{1}{2}\right> \\
+\left|\frac{3}{2} e_{2}\right>=e_{+}\left|\frac{3}{2}-\frac{3}{2}\right>+e_{-}\left|\frac{3}{2} \frac{1}{2}\right>
+\end{cases}
+\\
+\epsilon_{-}=\epsilon_{3,4}=-\epsilon_{+}, &
+\begin{cases}
+\left|\frac{3}{2} e_{3}\right>=e_{-}\left|\frac{3}{2} \frac{3}{2}\right>-e_{+}\left|\frac{3}{2}-\frac{1}{2}\right> \\
+\left|\frac{3}{2} e_{4}\right>=e_{-}\left|\frac{3}{2}-\frac{3}{2}\right>-e_{+}\left|\frac{3}{2} \frac{1}{2}\right>
+\end{cases}
+\end{array}
+\]
+</div>
+
+<p>四极分裂的大小满足：</p>
+<div class="equation">
+\[
+\Delta E_{Q}=|e Q| \sqrt{\phi_{11}} \tag{2.5}
+\]
+</div>
+
+<p>轴对称电场梯度\((\eta=0\Rightarrow e_{-}=0)\)时，克莱默共轭态\(|3/2\pm m\rangle\)就是哈密顿的本征态。</p>
+
+<h4>(ii) \(I=2\) 的哈密顿量</h4>
+<p>约化矩阵\((h_{ik})\)为：</p>
+<div class="equation">
+\[
+\left(h_{i k}\right)=\begin{pmatrix}
+6 & 0 & \sqrt{6} \eta & 0 & 0 \\
+0 & -3 & 0 & 3 \eta & 0 \\
+\sqrt{6} \eta & 0 & -6 & 0 & \sqrt{6} \eta \\
+0 & 3 \eta & 0 & -3 & 0 \\
+0 & 0 & \sqrt{6} \eta & 0 & 6
+\end{pmatrix}
+\]
+</div>
+
+<p>该矩阵可分解为一个二维子矩阵与一个三维子矩阵。二维子矩阵的解为：</p>
+<div class="equation">
+\[
+\epsilon_{2}=-3(1+\eta), \quad\left|e_{2}\right>=2^{-1 / 2}(|1>-|-1>) \tag{2.7}
+\]
+</div>
+
+<p>通过幺正变换：</p>
+<div class="equation">
+\[
+U=\begin{pmatrix}
+1 / \sqrt 2 & 0 & - 1 / \sqrt{2} \\
+0 & 1 & 0 \\
+1 / \sqrt{2} & 0 & 1 / \sqrt{2}
+\end{pmatrix}
+\]
+</div>
+
+<div class="equation">
+\[
+U\begin{pmatrix}6 & \sqrt{6} \eta & 0 \\ \sqrt{6} \eta & -6 & \sqrt{6} \eta \\ 0 & \sqrt{6} \eta & 6\end{pmatrix} U^{\dagger}=
+\begin{pmatrix}6 & 0 & 0 \\ 0 & -6 & 2 \sqrt{3} \eta \\ 0 & 2 \sqrt{3} \eta & 6\end{pmatrix}
+\]
+</div>
+
+<p>三维子矩阵可进一步分解，其中二维块与\(I=3/2\)的问题形式一致。最终得到本征值与本征矢：</p>
+<div class="equation">
+\[
+\begin{array}{ll}
+\epsilon_{1}=-6\left(1+\eta^{2} / 3\right)^{1 / 2}, & \left|e_{1}\right>=e_{-} 2^{-1 / 2}(|2>+|-2>)-e_{+}|0> \\
+\epsilon_{4}=6, & \left|e_{4}\right> =2^{-1 / 2}(|2>-|-2>) \\
+\epsilon_{5}=-\epsilon_{1}, & \left|e_{5}\right> =e_{+} 2^{-1 / 2}(|2>+|-2>)+e_{-}|0>
+\end{array}
+\]
+</div>
+
+<p>系数\(e_\pm\)沿用前面的定义。轴对称电场梯度\((\eta=0)\)将五重简并自旋态分裂为3个能级：两个二重简并能级、一个单态。</p>
+
+<h4>(iii) \(I=5/2\) 的哈密顿量</h4>
+<p>六维哈密顿矩阵分解为两个3×3矩阵，二者通过幺正变换联系。其中一个子矩阵为：</p>
+<div class="equation">
+\[
+\left(h_{i k}\right)=\begin{pmatrix}
+10 & 2 \sqrt{5} \eta & 0 \\
+2 \sqrt{5} \eta & -8 & 3 \sqrt{2} \eta \\
+0 & 3 \sqrt{2} \eta & -2
+\end{pmatrix}
+\]
+</div>
+
+<p>本征值满足久期方程：</p>
+<div class="equation">
+\[
+\epsilon^{3}-28\left(3+\eta^{2}\right) \epsilon-160\left(1-\eta^{2}\right)=0 \tag{2.12}
+\]
+</div>
+
+<p>简并本征态为：</p>
+<div class="equation">
+\[
+|e>=e_{5 / 2}\left|\frac{5}{2}\right>+e_{1 / 2}\left|-\frac{1}{2}\right>+e_{-3 / 2}\left|-\frac{3}{2}\right>
+\]
+</div>
+<p>以及时间反演态：</p>
+<div class="equation">
+\[
+\theta|e>=e_{5 / 2}\left|-\frac{5}{2}\right>+e_{1 / 2}\left|+\frac{1}{2}\right>+e_{-3 / 2}\left|\frac{3}{2}\right>
+\]
+</div>
+
+<p>这里用到关系\(\theta e_{m}|I m>=(-)^{I-m} e_{m}^{*}|I-m\rangle\)，且\(e_m^*=e_m\)。图1画出了3组克莱默二重态本征值（以\(\mu_{5/2}\)为单位）随不对称参数\(\eta\)的变化。S. Kareem等人已给出其解析解<sup>[22]</sup>。</p>
+
+<h4>(iv) \(I=7/2\) 的哈密顿量</h4>
+<p>八维哈密顿矩阵拆分为两个等价的4×4子矩阵，其一为：</p>
+<div class="equation">
+\[
+\left(h_{i k}\right)=\begin{pmatrix}
+21 & \sqrt{21} \eta & 0 & 0 \\
+\sqrt{21} \eta & -9 & 2 \sqrt{15} \eta & 0 \\
+0 & 2 \sqrt{15} \eta & -15 & 3 \sqrt{5} \eta \\
+0 & 0 & 3 \sqrt{5} \eta & 3
+\end{pmatrix}
+\]
+</div>
+
+<p>对应的久期多项式为：</p>
+<div class="equation">
+\[
+\epsilon^{4}-126\left(3+\eta^{2}\right) \epsilon^{2}-1728\left(1-\eta^{2}\right) \epsilon+945\left(3+\eta^{2}\right)^{2}=0 \tag{2.16}
+\]
+</div>
+
+<p>每个本征值对应的简并本征态为：</p>
+<div class="equation">
+\[
+|e>=e_{7 / 2}\left|\frac{7}{2}\right>+e_{3 / 2}\left|\frac{3}{2}\right>+e_{-1 / 2}\left|-\frac{1}{2}\right>+e_{-5 / 2}\left|-\frac{5}{2}\right>
+\]
+</div>
+<p>以及时间反演态\(\theta|e\rangle\)。图1绘出了4组克莱默二重态能量随\(\eta\)的变化，同样存在解析表达式<sup>[22]</sup>。</p>
+
+<blockquote>
+    <p><strong>图1</strong> 不同自旋态的能级分裂随电场梯度不对称参数\(\eta\)的变化。能量单位：\(I=3/2,2\)使用\(\mu_{I}=e Q V_{zz}/[4I(2I-1)]\)；\(I=5/2,7/2\)使用\(2\mu_I\)。</p>
+</blockquote>
+
+<p>对比图中四组曲线，可观察到两个特点：</p>
+<ol>
+    <li>对于半整数自旋，在\(\eta=0\)处导数\(\partial\epsilon_i/\partial\eta=0\)，因此实验上很难观测小\(\eta\)的效应。而对于整数自旋\(I=2\)，\(|\pm1\rangle\)能级的分裂随\(\eta\)线性增加，对偏离零的不对称度十分敏感。</li>
+    <li>\(\eta=1\)时，全部能级结构关于零点\(\epsilon=0\)中心对称。</li>
+</ol>
+
+<h3>2.2 从谱线位置可获得的信息</h3>
+
+<p>激发态\(I_e\)与基态\(I_g\)的能级差\(\Delta_{ik}=E_i(I_e)-E_k(I_g)\)与谱线位置（以mm/s为单位，相对于同质异能移）成正比。若其中一个能级不发生分裂（如\(I=1/2\)），谱线位置可直接由图1中\(\epsilon_k(\eta)\)的曲线乘以比例因子得到。典型例子包括：\(^{57}\text{Fe}\)的\(I_e=3/2\to I_g=1/2\)跃迁，\(^{67}\text{Zn}\)的\(I_e=1/2\to I_g=5/2\)跃迁，以及\(I_e=2\to I_g=0\)跃迁。比例因子为\(\mu_I \cdot c/E_0\)，其中\(c\)为光速，\(E_0\)为跃迁能量。</p>
+
+<p>以\(^{151}\text{Eu}\)的\(I_e=5/2\to I_g=7/2\)跃迁作为复杂情形的实例。激发态与基态具有不同的比例因子，其比值由四极矩之比\(Q_e/Q_g=1.34\)确定<sup>[23]</sup>。能级差可写为：</p>
+<div class="equation">
+\[
+\Delta_{i k}=\mu_{I_{e}} \cdot \epsilon_{i}\left(I_{e}\right)-\mu_{I_{g}} \cdot \epsilon_{k}\left(I_{g}\right)=\mu_{I_{g}}\left[\frac{Q_{e}}{Q_{g}} \epsilon_{i}\left(I_{e}\right)-\epsilon_{k}\left(I_{g}\right)\right] \tag{2.18}
+\]
+</div>
+
+<p>谱图横坐标\(\delta_{ik} = \mu_{I_e}\epsilon_i(I_e)-\mu_{I_g}\epsilon_k(I_g)\)，整体比例因子为\(\mu_{I_g}\cdot c/E_0\)。图2展示了全部能级差对应的谱线位置\(\delta_{ik}(\eta)\)。在某些观测方向下，部分谱线强度会消失；角动量守恒也会使一些谱线强度为零。图2上方的棒状谱图给出了\(\eta=0\)时薄粉末样品M1跃迁的谱线强度（将在3.2.2节计算）。</p>
+
+<blockquote>
+    <p><strong>图2</strong> \(I_e=7/2\to I_g=5/2\)跃迁的谱线位置\(\delta_{ik}\)随不对称参数\(\eta\)的依赖关系。\(\mu_{I_e}/\mu_{I_g}=0.638\)，对应\(^{151}\text{Eu}\) 21.6 keV跃迁的四极矩比值\(Q_e/Q_g=1.34\)；速度单位为\(\mu_{I_g} c/E_0\)。记号\((n,m)\)代表跃迁\((\pm n/2\to\pm m/2)\)，其中\(|\pm m/2\rangle\)是轴对称EFG的本征态。图顶部：\(\eta=0\)时薄粉末样品M1跃迁的棒状强度谱。</p>
+</blockquote>
+
+<p>比例因子决定电场梯度主分量\(V_{zz}\)的大小与符号；调节比例因子，使全部谱线位置与图2中某一水平截线的\(\delta_{ik}\)匹配，即可得到\(\eta\)值。</p>
+
+<h2>3 穆斯堡尔吸收谱的谱线强度</h2>
+
+<p>本节在尽量不预先指定原子核本征态的前提下，推导穆斯堡尔谱强度的一般形式，核心工具是强度矩阵与吸收体的织构分量。3.1小节利用强度矩阵概述偏振γ射线在光学活性吸收体中的吸收行为；3.2小节针对所讨论的穆斯堡尔跃迁显式计算各矩阵。</p>
+
+<p>一般情况下，吸收体内电场梯度张量的主轴存在取向分布，用概率\(T(\alpha,\beta,\gamma)d\Omega\)描述；\(T(\alpha,\beta,\gamma)\)称为<strong>织构函数</strong>，既可描述织构粉末，也可描述具有不等价格位的单晶。织构函数按\((2L+1)\)维转动矩阵\(D_{m'm}^L(\beta)\)展开（欧拉角记为\(\beta=(\alpha,\beta,\gamma)\)）：</p>
+<div class="equation">
+\[
+T(\beta)=\sum_{L, m', m} t_{m' m}^{L} D_{m' m}^{L}(\beta)
+\]
+</div>
+
+<p>系数\(t_{m'm}^L\)称为<strong>织构分量</strong>。3.3小节将利用织构分量计算穆斯堡尔谱强度。德拜-沃勒因子\(f\)也可做类似展开：</p>
+<div class="equation">
+\[
+f(\beta)=\sum_{L, m} f_{m}^{L} D_{0 m}^{L}(\beta) \tag{3.2}
+\]
+</div>
+
+<p>其中\(\vartheta=\beta\)，\(\varphi=\pi-\gamma\)是γ射线相对于EFG主轴系的极角。无规粉末的戈尔德anski-卡里亚金效应、织构吸收体（引入超织构分量）的强度问题放在3.4节讨论。</p>
+
+<h3>3.1 矩阵表述形式</h3>
+
+<p>电磁辐射在物质中的传播是光谱学的重要课题。在可见光波段，法拉第旋转、圆双折射、二向色性等现象已广为人知。在γ射线波段，由于普通电子吸收很弱，这些效应通常可以忽略；但对于发生共振吸收的穆斯堡尔原子核，情况会发生变化，例如\(^{57}\text{Fe}\)原子核的γ法拉第旋转<sup>[24,25]</sup>，更多实例可参见Gonser与Fischer的综述<sup>[26]</sup>。已有工作用复2×2折射率矩阵对偏振γ射线的共振吸收进行了一般性处理<sup>[2]</sup>。</p>
+
+<p>以下三小节介绍辐射密度矩阵、折射率、强度矩阵以及穆斯堡尔谱的计算。该理论在这一阶段具有普适性，并不局限于纯四极相互作用。</p>
+
+<h4>3.1.1 偏振辐射的吸收</h4>
+
+<p>根据经典光学，折射率为\(n\)的介质中电场为：</p>
+<div class="equation">
+\[
+E=\exp (i n k z) E_{0} \tag{3.3}
+\]
+</div>
+
+<p>省略时间相位因子\(\exp(-i\omega t)\)；波矢\(\boldsymbol{k}=k\boldsymbol{e}_z\)；\(z=0\)处真空折射率\(n=1\)，相位因子为\(\exp(ikz)\)。对于共振吸收介质，折射率\(n\)是复2×2矩阵，一般不能通过幺正变换对角化。</p>
+
+<p>先考虑对角折射率的情形，\(n_x,n_y\)是介质光轴\(\boldsymbol{e}_x,\boldsymbol{e}_y\)方向的折射率，\(E_x,E_y\)分量独立传播。式(3.3)分解为：</p>
+<div class="equation">
+\[
+E_{x}=e^{i n_{x} k z} E_{0 x} \tag{3.4}
+\]
+</div>
+
+<p>矩阵指数满足：</p>
+<div class="equation">
+\[
+\exp\begin{pmatrix}a&0\\0&b\end{pmatrix}=
+\begin{pmatrix}\exp(a)&0\\0&\exp(b)\end{pmatrix}
+\]
+</div>
+
+<p>\(n_x,n_y\)是复数：虚部对应吸收，实部对应色散。出射光强为：</p>
+<div class="equation">
+\[
+I / I_{0}=E^{\dagger} E /\left|E_{0}\right|^{2} \tag{3.6}
+\]
+</div>
+
+<div class="equation">
+\[
+\begin{aligned} E^{\dagger} E & =\left(e^{i n k z} E_{0}\right)^{\dagger}\left(e^{i n k z} E_{0}\right) \\ & =E_{0}^{\dagger} e^{-i n^{\dagger} k z} e^{i n k z} E_{0} \\ & =\sum_{\alpha, \beta, s} E_{0 \beta}^{*}\left(e^{-i n^{\dagger} k z}\right)_{\beta s}\left(e^{i n k z}\right)_{s \alpha} E_{0 \alpha} \end{aligned}
+\]
+</div>
+
+<p>写成求迹形式：</p>
+<div class="equation">
+\[
+I / I_{0}=Tr\left(e^{i n k z} \rho_{0} e^{-i n^{\dagger} k z}\right) \tag{3.8}
+\]
+</div>
+
+<p>穿过厚度为\(d\)的介质后，辐射密度矩阵为：</p>
+<div class="equation">
+\[
+\rho(d)=e^{i n k d} \rho_{0} e^{-i n^{\dagger} k d} \tag{3.9}
+\]
+</div>
+
+<p>线偏振光的密度矩阵为：</p>
+<div class="equation">
+\[
+\rho=\begin{pmatrix}
+cos ^{2} \varphi & \frac{1}{2} sin 2 \varphi \cdot e^{i \alpha} \\
+\frac{1}{2} sin 2 \varphi \cdot e^{-i \alpha} & sin ^{2} \varphi
+\end{pmatrix}
+\]
+</div>
+
+<p>纯偏振满足\(\rho^2=\rho\)，\(Tr(\rho)=1\)。</p>
+
+<p>完全非偏振光是不同角度\(\alpha,\varphi\)光波的非相干叠加；对所有角度求平均，得到非偏振光密度矩阵\(\rho_u\)（\(\overline{\sin^2\varphi}=1/2,\overline{\sin2\varphi}=0\)）：</p>
+<div class="equation">
+\[
+\rho_{u}=\begin{pmatrix}1 / 2 & 0 \\ 0 & 1 / 2\end{pmatrix} \tag{3.12}
+\]
+</div>
+
+<p>\(\rho_u^2\neq\rho_u\)。厄米密度矩阵有两个本征值；本征值之差的绝对值\(\xi\)定义为偏振度。非偏振光\(\xi(\rho_u)=0\)。一般情形下：</p>
+<div class="equation">
+\[
+\xi=[1-4 \det(\rho)]^{1 / 2} \tag{3.13}
+\]
+</div>
+
+<p>电场矢量也常用左旋、右旋圆偏振基\(u_{\pm1}=2^{-1/2}(e_x\pm i e_y)\)表示，满足\(u_i^*u_k=\delta_{ik}\)。电场展开为\(E=E_{-1}u_{-1}+E_1u_1\)。圆偏振对应的密度矩阵为：</p>
+<div class="equation">
+\[
+\rho_{r}=\begin{pmatrix}0 & 0 \\ 0 & 1\end{pmatrix},\quad
+\rho_{l}=\begin{pmatrix}1 & 0 \\ 0 & 0\end{pmatrix}
+\]
+</div>
+
+<p>\(x\)、\(y\)方向线偏振的密度矩阵：</p>
+<div class="equation">
+\[
+\rho_{x}=\frac{1}{2}\begin{pmatrix}1 & 1 \\ 1 & 1\end{pmatrix},\;
+\rho_{y}=\frac{1}{2}\begin{pmatrix}1 & -1 \\ -1 & 0\end{pmatrix} \tag{3.16a}
+\]
+</div>
+
+<p>角度为\(\varphi\)的任意线偏振\(\boldsymbol{e}_\varphi=\cos\varphi\boldsymbol{e}_x+\sin\varphi\boldsymbol{e}_y\)：</p>
+<div class="equation">
+\[
+\rho_{\varphi}=\frac{1}{2}\begin{pmatrix}1 & e^{2 i \varphi} \\ e^{-2 i \varphi} & 1\end{pmatrix} \tag{3.16b}
+\]
+</div>
+
+<p>泡利矩阵：</p>
+<div class="equation">
+\[
+\sigma_{\xi}=\begin{pmatrix}0 & 1 \\ 1 & 0\end{pmatrix},\;
+\sigma_{\eta}=\begin{pmatrix}0 & -i \\ i & 0\end{pmatrix},\;
+\sigma_{\zeta}=\begin{pmatrix}1 & 0 \\ 0 & -1\end{pmatrix} \tag{3.17}
+\]
+</div>
+
+<p>密度矩阵可用庞加莱矢量\(\boldsymbol{P}\)表示：</p>
+<div class="equation">
+\[
+\rho=\frac{1}{2}\left(\boldsymbol{1}_2+\boldsymbol{P}\cdot\boldsymbol{\sigma}\right) \tag{3.18}
+\]
+</div>
+<div class="equation">
+\[
+P_{\mu}=Tr\left(\rho \sigma_{\mu}\right)
+\]
+</div>
+
+<p>代入可得\(\rho_\varphi\)对应的庞加莱矢量\(\boldsymbol{P}=(\sin2\varphi,0,\cos2\varphi)\)。</p>
+
+<p>依照Blume与Kistner的工作<sup>[2]</sup>，折射率矩阵可分解为：</p>
+<div class="equation">
+\[
+n k z=a \boldsymbol{1}_2+\boldsymbol{b}\cdot\boldsymbol{\sigma} \tag{3.21}
+\]
+</div>
+
+<p>由于\(n\)不一定是厄米矩阵，\(a\)为复数，\(\boldsymbol{b}\)为复矢量。透射光强是\(a,b\)与入射光庞加莱矢量\(\boldsymbol{P}_0\)的函数：</p>
+<div class="equation">
+\[
+\begin{aligned} I(d) / I_{0}= & \exp \left[i\left(a-a^{*}\right)\right] \cdot\big[\cos b^{*} \cos b+\left(\hat{b}^{*} \cdot \hat{b}\right) \sin b^{*} \sin b \\ & +i \boldsymbol{P}_{0}\cdot\big(\hat{b} \sin b \cos b^{*}-\hat{b}^{*} \sin b^{*} \cos b \\ & \left.\left.+\left(\hat{b}^{*} × \hat{b}\right) \sin b^{*} \sin b\right)\big] \end{aligned} \tag{3.22a}
+\]
+</div>
+
+<p>透射光的庞加莱矢量为：</p>
+<div class="equation">
+\[
+\begin{aligned} \boldsymbol{P}\,I(d) / I_{0}= & \exp \left[i\left(a-a^{*}\right)\right] \cdot\big[i \big(\hat{b} \sin b \cos b^{*} \\ & \left.-\hat{b}^{*} \sin b^{*} \cos b-\left(\hat{b}^{*} × \hat{b}\right) \sin b^{*} \sin b\big) \\ & +\boldsymbol{P}_{0}\left(\cos b^{*} \cos b-\left(\hat{b}^{*} \cdot \hat{b}\right) \sin b^{*} \sin b\right) \\ & +\boldsymbol{P}_{0} \times\left(\hat{b} \sin b \cos b^{*}+\hat{b}^{*} \sin b^{*} \cos b\right)+\hat{b}\left(\boldsymbol{P}_{0} \cdot\hat{b}^{*}\right) \\ & \left.+\hat{b}^{*}\left(\boldsymbol{P}_{0} \cdot\hat{b}\right)\big] \end{aligned} \tag{3.22b}
+\]
+</div>
+
+<p>其中标量\(b=(b_\xi^2+b_\eta^2+b_\zeta^2)^{1/2}\)，单位矢量\(\hat{\boldsymbol{b}}=\boldsymbol{b}/b\)。</p>
+
+<p>实验上有三类受关注的情形：</p>
+<ol>
+    <li>入射光非偏振（\(\boldsymbol{P}_0=0\)），是最重要的情形；</li>
+    <li>入射偏振光，需完整使用式(3.22a)；</li>
+    <li>入射非偏振光，出射光产生偏振；吸收体充当偏振滤光片，用于第2类实验。</li>
+</ol>
+
+<p>当\(n\)与\(n^\dagger\)对易，即\(n n^\dagger =n^\dagger n\)时，矩阵指数可以合并：</p>
+<div class="equation">
+\[
+\exp \left(-i n^{\dagger} k d\right) \cdot \exp (i n k d)=\exp \left[-i k d\left(n^{\dagger}-n\right)\right]
+\]
+</div>
+
+<div class="equation">
+\[
+I(d, E)=I_{0} Tr\left\{\rho_{0} \exp \left[-i k d\left(n^{\dagger}-n\right)\right]\right\}
+\]
+</div>
+
+<p>若可以对角化，写成本征表象：</p>
+<div class="equation">
+\[
+I(d, E)=I_{0} \sum_{i} \rho_{0, i i}' \exp \left(-\nu_{i i}\right)
+\]
+</div>
+
+<div class="equation">
+\[
+\rho(d, E) / I_{0}=\frac{1}{2} U^{\dagger}\begin{pmatrix}\exp(-\nu_{11})&0\\0&\exp(-\nu_{-1-1})\end{pmatrix}U
+\]
+</div>
+
+<p>折射率与跃迁矩阵元的关系：</p>
+<div class="equation">
+\[
+n_{p q}=\delta_{p q}+\frac{2 \pi}{k^{2}} N F_{p q}
+\]
+</div>
+
+<div class="equation">
+\[
+F_{p q}^{\alpha}=\left(\frac{k V}{2 \pi \hbar c}\right) f(k) \sum_{\beta} \frac{\left(a_{p}^{\alpha \beta}\right)^{*}\left(a_{q}^{\alpha \beta}\right)}{E-\left(E_{\beta}-E_{\alpha}\right)+i \Gamma / 2}
+\]
+</div>
+
+<p>\(\beta\)遍历全部激发态；\(E\)为光子能量，\(E_\alpha\)为基态能量，\(E_\beta\)为激发态能量；\(\Gamma\)为激发态能级宽度；\(V\)为归一化体积，\(f(k)\)为德拜-沃勒因子。\(F_{pq}^\alpha\)需要对基态求平均。温度高于约1K时基态布居均匀：</p>
+<div class="equation">
+\[
+F_{p q}=\frac{1}{2 I_{g}+1} \sum_{\alpha} F_{p q}^{\alpha} \tag{3.28}
+\]
+</div>
+
+<p>考虑磁偶极M1+电四极E2混合跃迁（E1/M2跃迁无实际意义）。跃迁振幅为<sup>[2,28]</sup>：</p>
+<div class="equation">
+\[
+a_{p}^{\alpha \beta}(\vartheta)=2 \pi i(\hbar c / k V)^{1 / 2} \sum_{M} M_{1} V_{1 M}^{\alpha \beta} D_{M p}^{1}(\vartheta)-p E_{2} V_{2 M}^{\alpha \beta} D_{M p}^{2}(\vartheta) \tag{3.29a}
+\]
+</div>
+
+<p>其中张量定义为：</p>
+<div class="equation">
+\[
+V_{L M}^{\alpha \beta}=\left(\frac{2 L+1}{2 I_{e}+1}\right)^{1 / 2} \sum_{m_{e}, m_{g}} e_{\beta m_{e}}^{*} g_{\alpha m_{g}} C\left(I_{g} L I_{e}, m_{g} M m_{e}\right) \tag{3.29b}
+\]
+</div>
+
+<p>欧拉角\(\vartheta=(\varphi,\vartheta,\psi)\)定义γ坐标系\(S^\gamma\)相对于原子核态坐标系\(S^E\)的取向；\(S^\gamma\)的z轴由放射源与探测器确定。\(D_{Mp}^L(\vartheta)\)为转动矩阵元。\(M_1,E_2\)分别是M1、E2跃迁的约化矩阵元；\(C\)是克莱布希-高登系数。</p>
+
+<p>定义2×2吸收体矩阵：</p>
+<div class="equation">
+\[
+r_{p q}=\left(a_{p}^{\alpha \beta}\right)^{*} a_{q}^{\alpha \beta} /\left(M_{1}^{2}+E_{2}^{2}\right) \cdot(V k / \hbar c)
+\]
+</div>
+
+<p>折射率可写为：</p>
+<div class="equation">
+\[
+n_{p q}=\delta_{p q}-\frac{1}{k} \sigma_{0} f(k) N \cdot \sum_{\alpha \beta} \frac{1}{2} r_{p q}^{\alpha \beta} \frac{\Gamma / 2}{E-\left(E_{\beta}-E_{\alpha}\right)+i \Gamma / 2} \tag{3.31}
+\]
+</div>
+
+<div class="equation">
+\[
+\begin{aligned} r_{p q}= & \left(1+\delta^{2}\right)^{-1} \sum_{M, M'} D_{p M}^{1 \dagger} V_{1 M}^{*} V_{1 M'} D_{M' q}^{1} \\ & +p \cdot q \delta^{2} D_{p M}^{2 \dagger} V_{2 M}^{*} V_{2 M'} D_{M' q}^{2}-\delta\big(p \cdot D_{p M}^{2 \dagger} V_{2 M}^{*} V_{1 M'} D_{M' q}^{1}\\ & \left.+q \cdot D_{p M}^{1 \dagger} V_{1 M}^{*} V_{2 M'} D_{M' q}^{2}\right) \end{aligned}
+\]
+</div>
+
+<p>引入记号：</p>
+<div class="equation">
+\[
+I_{M M'}^{L}=V_{L M}^{*} V_{L M'},\quad J_{M M'}^{L L'}=V_{L M}^{*} V_{L' M'} \tag{3.33}
+\]
+</div>
+
+<p>转动变换关系：</p>
+<div class="equation">
+\[
+I^{L}\left(S^{\gamma}\right)=D^{L \dagger} I^{L}\left(S^{E}\right) D^{L},\quad J\left(S^{\gamma}\right)=D^{1 \dagger} J\left(S^{E}\right) D^{2} \tag{3.34}
+\]
+</div>
+
+<div class="equation">
+\[
+r_{p q}^{\alpha \beta}=\frac{1}{1+\delta^{2}}\left[\left(I^{1}\right)_{p q}^{\alpha \beta}+p \cdot q \delta^{2}\left(I^{2}\right)_{p q}^{\alpha \beta}-\delta\left(p\left(J_{p q}^{\alpha \beta}\right)^{\dagger}+q J_{p q}\right)\right] \tag{3.35}
+\]
+</div>
+
+<p>跃迁对称性关系：</p>
+<div class="equation">
+pq\cdot r_{pq}(E1)=r_{pq}(M1) \tag{3.36a}
+\]
+</div>
+<div class="equation">
+\[
+\rho_{pq}(M1)=pq\cdot\rho_{pq}(E1) \tag{3.36b}
+\]
+</div>
+
+<p>多格位平均折射率：</p>
+<div class="equation">
+\[
+n=\boldsymbol{1}_2-\frac{\sigma_{0}}{2 k} \sum_{j} f_{j}(k) N_{j} \sum_{\alpha \beta} r_{j}^{\alpha \beta} \frac{\Gamma / 2}{E-\left(E_{\beta}-E_{\alpha}\right)+i \Gamma / 2}
+\]
+</div>
+
+<p>定义平均吸收矩阵、平均德拜-沃勒因子、光学厚度：</p>
+<div class="equation">
+\[
+\overline{r}^{\alpha \beta}=\sum_{j} f_{j}(k) N_{j} r_{j}^{\alpha \beta} / N \overline{f} \tag{3.38a}
+\]
+</div>
+<div class="equation">
+\[
+\hat{f}(k)=\sum_{j} f_{j}(k) N_{j} / N \tag{3.38b}
+\]
+</div>
+<div class="equation">
+\[
+t(k)=\sigma_{0} \hat{f}(k) N d \tag{3.38c}
+\]
+</div>
+
+<div class="equation">
+\[
+n k d=k d \boldsymbol{1}_2-\frac{1}{2} t \sum_{\alpha \beta} \overline{r}^{\alpha \beta} \frac{\Gamma / 2}{E-\left(E_{\beta}-E_{\alpha}\right)+i \Gamma / 2} \tag{3.39}
+\]
+</div>
+
+<p>对取向求平均后的强度矩阵：</p>
+<div class="equation">
+\[
+\overline{I}^{1}=\sum_{j} f_{j}(k) N_{j} D^{1 \dagger}\left(\vartheta_{j}\right) I^{1}\left(S^{E}\right) D^{1}\left(\vartheta_{j}\right) / N \overline{f}
+\]
+</div>
+<div class="equation">
+\[
+\overline{I}^{1}\left(S^{\gamma}\right)=D^{1 \dagger}(\vartheta) \overline{I}^{1}\left(S^{A}\right) D^{1}(\vartheta) \tag{3.41}
+\]
+</div>
+
+<p>对易子：</p>
+<div class="equation">
+\[
+\begin{aligned} \left[n, n^{\dagger}\right]_{-}= & -\frac{\sigma_{0}}{2 k} N \overline{f} \sum_{\alpha \alpha' \beta \beta'}\left[\overline{r}^{\alpha \beta}, \overline{r}^{\alpha' \beta'}\right] \\ & × \frac{\Gamma^{2} / 4}{\left[E-\left(E_{\beta}-E_{\alpha}\right)+i \Gamma / 2\right]\left[E-\left(E_{\beta'}-E_{\alpha'}\right)-i \Gamma / 2\right]} \end{aligned}
+\]
+</div>
+
+<p>洛伦兹线型：</p>
+<div class="equation">
+\[
+L_{s i}(E, v)=\frac{\Gamma^{2} / 4}{\left[E-E_{s i}(1+v / c)\right]^{2}+\Gamma^{2} / 4}
+\]
+</div>
+
+<p>源的谱：</p>
+<div class="equation">
+\[
+S(E, v)=\sum_{i} I_{s i} \rho_{s i} L_{s i}(E, v)
+\]
+</div>
+
+<p>透射强度：</p>
+<div class="equation">
+\[
+I(d, E, v)=Tr\left[\exp (i n k d) S(E, v) \exp \left(-i n^{\dagger} k d\right)\right] \tag{3.45}
+\]
+</div>
+
+<p>计数率表达式：</p>
+<div class="equation">
+\[
+N(d, v)=N(d, \infty)\left[1-f_{s}\left(1-\frac{2}{\Gamma \pi} \int_{-\infty}^{\infty} I(d, E, v) d E\right)\right] \tag{3.46}
+\]
+</div>
+
+<p>穆斯堡尔谱（速度谱）：</p>
+<div class="equation">
+\[
+\begin{aligned} SP(v)= & f_{s}\Big\{1-\frac{2}{\Gamma \pi} \int_{-\infty}^{\infty} L_{s}(E, v)\\
+& \left.× \frac{1}{2} Tr\left[\exp (i n k d) \exp \left(-i n^{\dagger} k d\right)\right] d E\right\} \end{aligned}
+\]
+</div>
+
+<p>薄吸收体近似下，单条谱线的贡献：</p>
+<div class="equation">
+\[
+SP(v)_{i}^{\alpha \beta}=f_{s} t I_{s i} Tr\left(\overline{r}^{\alpha \beta} \rho_{s i}\right) \frac{\Gamma^{2}}{\left[E_{s i}(v / c)-\left(E_{\beta}-E_{\alpha}\right)\right]^{2}+\Gamma^{2}} \tag{3.48a}
+\]
+</div>
+
+<p>总谱：</p>
+<div class="equation">
+\[
+SP(v)=\sum_{\alpha, \beta, i} SP(v)_{i}^{\alpha \beta} \tag{3.48b}
+\]
+</div>
+
+<p>单条谱线的积分面积：</p>
+<div class="equation">
+\[
+A_{i}^{\alpha \beta}=\int_{-\infty}^{+\infty} SP_{i}^{\alpha \beta}(v) d v=f_{s} t \frac{\Gamma \pi}{2} Tr\left(\overline{r}^{\alpha \beta} \rho_{s i}\right) \tag{3.49a}
+\]
+</div>
+<div class="equation">
+\[
+A^{\alpha \beta}=f_{s} t \frac{\Gamma \pi}{2} \cdot \frac{1}{2} Tr\left(\overline{r}^{\alpha \beta}\right) \tag{3.49b}
+\]
+</div>
+<div class="equation">
+\[
+\sum_{\alpha \beta} A^{\alpha \beta}=f_{s} t \cdot \frac{\Gamma \pi}{2} \tag{3.49c}
+\]
+</div>
+
+<p>求和规则：</p>
+<div class="equation">
+\[
+\sum_{\alpha} Tr\left(I^{L}\right)^{\alpha \beta}=(2 L+1) /\left(2 I_{e}+1\right) \tag{3.50a}
+\]
+</div>
+<div class="equation">
+\[
+\sum_{\beta} Tr\left(I^{L}\right)^{\alpha \beta}=(2 L+1) /\left(2 I_{g}+1\right) \tag{3.50b}
+\]
+</div>
+<div class="equation">
+\[
+\sum_{\alpha \beta}\left(I^{L}\right)_{M M'}^{\alpha \beta}=\delta_{M M'} \tag{3.51a}
+\]
+</div>
+<div class="equation">
+\[
+\sum_{\alpha \beta} J_{M M'}^{\alpha \beta}=0 \tag{3.51b}
+\]
+</div>
+<div class="equation">
+\[
+\sum_{\alpha \beta} r_{p q}^{\alpha \beta}=\delta_{p q} \tag{3.52}
+\]
+</div>
+
+<p>对称性：</p>
+<div class="equation">
+\[
+J_{M M'}=-J_{-M-M'}
+\]
+</div>
+<div class="equation">
+\[
+I_{M M'}\left(I_{1} \to I_{2}\right)=(-1)^{M+M'} I_{-M'-M}\left(I_{2} \to I_{1}\right) \tag{3.54}
+\]
+</div>
+
+<h3>3.2 典型跃迁的强度矩阵</h3>
+
+<p>对于纯四极相互作用，利用式(3.53)的限制，I矩阵保持不变，干涉项改变符号。以\(^{57}\text{Fe}\)的\(3/2\to1/2\)（M1）跃迁为例，首先利用2.1节给出的本征态计算每个跃迁的张量\(V_{LM}^{\alpha\beta}\)。将式(3.30)中的克莱布希-高登系数替换为更常用的维格纳3j符号：</p>
+<div class="equation">
+\[
+V_{L M}^{\alpha \beta}=(2 L+1)^{1 / 2} \sum_{m_{g} m_{e}} e_{\beta m_{e}}^{*} g_{\alpha m_{g}}(-1)^{I_{g}-L+m_{e}}
+\begin{pmatrix}I_{g}&L&I_{e}\\m_{g}&M&-m_{e}\end{pmatrix} \tag{3.55}
+\]
+</div>
+
+<p>量子数为\(I_g=1/2\)，\(L=1\)，\(I_e=3/2\)。基态克莱默二重态\(|I_g,\pm1/2\rangle\)的系数\(g_{\alpha m_g}=\delta_{\alpha m_g}\)。张量分量写成行向量形式：</p>
+<div class="equation">
+\[
+\left(V_{1 M}^{\frac{1}{2} \beta}\right)=\left(\frac{\sqrt{3}}{2} e_{\beta \frac{1}{2}}^{*}, \frac{1}{\sqrt{2}} e_{\beta \frac{1}{2}}^{*}, \frac{1}{2} e_{\beta-\frac{1}{2}}^{*}\right) \tag{3.56a}
+\]
+</div>
+<div class="equation">
+\[
+\left(V_{1 M}^{-\frac{1}{2} \beta}\right)=\left(\frac{1}{2} e_{\beta \frac{1}{2}}^{*}, \frac{1}{\sqrt{2}} e_{\beta-\frac{1}{2}}^{*}, \frac{\sqrt{3}}{2} e_{\beta-\frac{1}{2}}^{*}\right) \tag{3.56b}
+\]
+</div>
+
+<p>系数\(e_{\beta m_e}\)取自式(2.4)。共8个向量，对应\(\alpha=\pm1/2\)，\(\beta=1,2,3,4\)。将同一能量的跃迁对应的强度矩阵相加，得到矩阵\(I^\pi\)（省略\(L=1\)标记）：</p>
+<div class="equation">
+\[
+I^{\pi}=I^{11}+I^{\frac{1}{2}2}+I^{-11}+I^{-\frac{1}{2}2} \tag{3.58}
+\]
+</div>
+
+<p>\(I^\sigma\)可由求和规则直接得到：</p>
+<div class="equation">
+\[
+I^{\sigma}=I_{3}-I^{\pi} \tag{3.59}
+\]
+</div>
+
+<p>代入张量分量，得到：</p>
+<div class="equation">
+\[
+I^{\pi}=\begin{pmatrix}
+\frac{3}{4} e_{+}^{2}+\frac{1}{4} e_{-}^{2} & 0 & \frac{\sqrt{3}}{2} e_{+} e_{-} \\
+0 & e_{-}^{2} & 0 \\
+\frac{\sqrt{3}}{2} e_{+} e_{-} & 0 & \frac{3}{4} e_{+}^{2}+\frac{1}{4} e_{-}^{2}
+\end{pmatrix}
+\]
+</div>
+
+<p>可验证对称关系；矩阵的迹与\(\eta\)无关：\(Tr(I^\pi)=Tr(I^\sigma)=3/2\)。折射率与其厄米共轭矩阵对易的充分条件是吸收体矩阵\(\overline{r}^{\alpha\beta}\)具有对易性。\(I^\pi\)与\(I^\sigma=1_3-I^\pi\)显然互相对易，因此\(\overline{r}^\pi\)、\(\overline{r}^\sigma\)也对易。</p>
+
+<h4>(ii) \(^{197}\text{Au}\)的混合跃迁 \(1/2^+\to3/2^+\)（M1/E2）</h4>
+<p>混合跃迁需要计算\(I^1\)、\(I^2\)、\(J\)三个矩阵。\(I^1\)与上述\(3/2\to1/2\)跃迁的结果相同；\(I^2\)是5×5矩阵，\(J\)是3×5矩阵：</p>
+<div class="equation">
+\[
+\left(I^{2}\right)^{\pi}=\begin{pmatrix}
+e_{+}^{2} & 0 & \frac{1}{\sqrt{2}} e_{+} e_{-} & 0 & 0 \\
+0 & \frac{1}{4} e_{+}^{2}+\frac{3}{4} e_{-}^{2} & 0 & \frac{\sqrt 3}{2} e_{+} e_{-} & 0 \\
+\frac{1}{\sqrt{2}} e_{+} e_{-} & 0 & e_{-}^{2} & 0 & \frac{1}{\sqrt{2}} e_{+} e_{-} \\
+0 & \frac{\sqrt{3}}{2} e_{+} e_{-} & 0 & \frac{1}{4} e_{+}^{2}+\frac{3}{4} e_{-}^{2} & 0 \\
+0 & 0 & \frac{1}{\sqrt{2}} e_{+} e_{-} & 0 & e_{+}^{2}
+\end{pmatrix}
+\]
+</div>
+
+<div class="equation">
+\[
+J^{\pi}=\begin{pmatrix}
+0 & +\frac{\sqrt{3}}{4}\left(e_{+}^{2}-e_{-}^{2}\right) & 0 & +\frac{1}{2} e_{+} e_{-} & 0 \\
+-\frac{1}{\sqrt{2}} e_{+} e_{-} & 0 & 0 & 0 & +\frac{1}{\sqrt{2}} e_{+} e_{-} \\
+0 & -\frac{1}{2} e_{+} e_{-} & 0 & -\frac{\sqrt{3}}{4}\left(e_{+}^{2}-e_{-}^{2}\right) & 0
+\end{pmatrix}
+\]
+</div>
+
+<p>\(\sigma\)跃迁对应的矩阵可由式(3.62)得到：</p>
+<div class="equation">
+\[
+\left(I^{2}\right)^{\sigma}=\boldsymbol{1}_{5}-\left(I^{2}\right)^{\pi},\quad J^{\sigma}=-J^{\pi} \tag{3.62}
+\]
+</div>
+<p>\(Tr(I^2)=5/2\)。</p>
+
+<h4>(iii) E2跃迁 \(2^+\to0^+\)</h4>
+<p>\(V_{2M}^{0\beta}\)的张量分量就是激发态的展开系数\(e_{\beta M}^*\)：</p>
+<div class="equation">
+\[
+V_{2 M}^{0 \beta}=e_{\beta M}^{*} \tag{3.63}
+\]
+</div>
+
+<p>对应式(2.7)和(2.10)本征态的6个跃迁的强度矩阵此处从略。</p>
+
+<h3>3.3 织构与取向平均吸收矩阵</h3>
+
+<p>织构展开：</p>
+<div class="equation">
+\[
+T(\beta)=\sum_{L m' m} t_{m' m}^{L} D_{m' m}^{L}(\beta),\quad \frac{1}{\Omega}\int T(\beta)d\beta=1
+\]
+</div>
+
+<p>张量转动变换：</p>
+<div class="equation">
+\[
+I^{L}\left(S^{\gamma}\right)=D^{L}(\beta) I^{L}\left(S^{E}\right) D^{L\dagger}(\beta),\quad J\left(S^{\gamma}\right)=D^{1}(\beta) J\left(S^{E}\right) D^{2\dagger}(\beta)
+\]
+</div>
+
+<p>取向平均：</p>
+<div class="equation">
+\[
+\overline{r}_{p q}=\frac{1}{\Omega} \int T(\beta) r_{p q}(\beta) d \beta
+\]
+</div>
+<div class="equation">
+\[
+\overline{I}_{p q}^{L}=\frac{1}{\Omega} \int T(\beta)\left[D^{L}(\beta) I^{L} D^{L\dagger}(\beta)\right]_{p q} d \beta
+\]
+</div>
+
+<p>利用转动矩阵积分公式，可得到用织构分量\(t_{m'm}^L\)表达的平均强度矩阵。无规粉末情形下：</p>
+<div class="equation">
+\[
+\overline{I}_{p q}^{L}(\text{无规粉末})=\frac{1}{2 L+1} Tr\left(I^{L}\right) \delta_{p q}
+\]
+</div>
+
+<p>对于\(^{57}\text{Fe}\)，吸收矩阵元：</p>
+<div class="equation">
+\[
+\overline{r}_{11}^{\pi,\sigma}=A_{00}^{\pi,\sigma}+A_{20}^{\pi,\sigma},\quad \overline{r}_{1-1}^{\pi,\sigma}=B_{2-2}^{\pi,\sigma}
+\]
+</div>
+<p>其中\(A_{00}^{\pi,\sigma}=1/2\)。</p>
+
+<div class="equation">
+\[
+A_{2 m}^{\pi, \sigma}= \pm \frac{1}{20 \sqrt{6}}\left[\sqrt{6} t_{m 0}^{2}+\eta\left(t_{m 2}^{2}+t_{m-2}^{2}\right)\right]\left(1+\eta^{2} / 3\right)^{-\frac{1}{2}}
+\]
+</div>
+<div class="equation">
+\[
+B_{2 m}^{\pi, \sigma}=\sqrt{6} A_{2 m}^{\pi, \sigma}
+\]
+</div>
+
+<p>5个独立方向的测量可以唯一确定\(A_{2m}\)；非对角元\(\overline{r}_{1-1}\)携带同样的信息；利用偏振光测量可以减少所需的测量方向数目。</p>
+
+<p>对于\(^{197}\text{Au}\)的混合跃迁，\(A_{2m}\)与M1情形成正比，依赖于混合比参数\(\delta\)。当\(\delta=\sqrt{3}\pm2\)时，角度依赖消失。\(^{197}\text{Au}\)的\(\delta=-0.354\)，接近\(\sqrt{3}-2\)，因此角度效应被显著压低。</p>
+
+<p>E2跃迁\(2^+\to0^+\)同时包含\(L=2\)与\(L=4\)的分量，吸收矩阵为：</p>
+<div class="equation">
+\[
+\overline{r}_{11}^{x}=A_{00}^{x}+A_{20}^{x}+A_{40}^{x},\quad
+\overline{r}_{1-1}^{x}=B_{2-2}^{x}+B_{4-2}^{x}
+\]
+</div>
+<p>其中\(A_{00}^x=1/5\)，对应无规粉末各条谱线的强度。</p>
+
+<h4>3.3.2 织构分量的坐标变换性质</h4>
+
+<p>织构分量在坐标系转动下按照转动矩阵变换。单晶、多重等价格位体系的织构分量可通过对各个格位的转动矩阵求平均得到。在若干点群对称下，织构分量会出现很多零元（如\(C_2\)、\(C_3\)等点群）。</p>
+
+<h3>3.4 各向异性德拜-沃勒因子与戈尔德anski-卡里亚金效应</h3>
+
+<p>德拜-沃勒因子\(f\)同样可以展开为转动矩阵级数。将织构函数\(T(\beta)\)与\(f(\beta)\)的乘积做展开，得到<strong>超织构分量</strong>\(\theta_{m'm}^L\)，它同时包含取向分布与各向异性振动的贡献。</p>
+
+<div class="equation">
+\[
+\theta_{m' m}^{L}=\frac{1}{\Omega} \int t_{m' m}^{L}(\beta) f\left(S^{E}, \beta\right) T(\beta) d \beta
+\]
+</div>
+
+<p>用\(\theta_{m'm}^L\)取代原来的织构分量，代入强度公式，即可同时处理织构与Goldanskii-Karyagin效应。\(f\)可分解为晶格贡献\(f_C\)和分子振动贡献\(f_M\)；二者相乘后的展开系数不等于各自展开系数的简单相乘，需要利用克莱布希-高登系数做耦合。实际计算中，级数通常截断到\(L\le4\)。</p>
+
+<p>对于单晶，晶格部分\(f_C\)对全部格位相同，可以从积分中提出，于是超织构分量简化为\(f_C\)乘以分子振动修正后的织构。对于无规粉末，仅需要超织构的标量部分，即可计算Goldanskii-Karyagin效应导致的谱线强度畸变。</p>
+
+<hr>
+<p class="figure-note">参考文献：</p>
+<ol class="ref-list">
+    <li>[1-3] 原始文献略</li>
+    <li>[4] 原始文献略</li>
+    <li>[5] 亚硝酰铁氰化钠相关研究</li>
+    <li>[6] 脱氧肌红蛋白血红素基团相关研究</li>
+    <li>[7] 一氧化碳配位肌红蛋白相关研究</li>
+    <li>[8] 分子轨道理论计算电场梯度相关研究</li>
+    <li>[9-11] 穆斯堡尔谱线强度理论简化方案</li>
+    <li>[12] 扰动角关联(PAC)实验标准方法</li>
+    <li>[13,14] 穆斯堡尔吸收体分类相关</li>
+    <li>[15] 穆斯堡尔偶极跃迁理论推广</li>
+    <li>[16] PAC实验理论推广</li>
+    <li>[17,18] Goldanskii-Karyagin效应相关</li>
+    <li>[22] S. Kareem等人的解析解工作</li>
+    <li>[23] \(^{151}\text{Eu}\)四极矩比值测定</li>
+    <li>[24,25] \(^{57}\text{Fe}\)的γ法拉第旋转</li>
+    <li>[26] Gonser与Fischer的综述</li>
+    <li>[28] 跃迁振幅相关理论</li>
+</ol>
+
+</body>
+</html>
